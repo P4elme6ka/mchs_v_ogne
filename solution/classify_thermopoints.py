@@ -3,7 +3,7 @@ import sys
 import pandas
 import xarray
 import requests
-import datetime
+from datetime import datetime, timedelta
 import pickle
 import numpy as np
 from tqdm import tqdm as tqdm
@@ -26,15 +26,50 @@ def extract_features(row):
         method='nearest',
     )
 
-    p1w = point.rolling(time=7).mean()
-    p2w = point.rolling(time=14).mean()
-    p3w = point.rolling(time=21).mean()
+    p1w = point.rolling(time=1).mean()
+    p2w = point.rolling(time=3).mean()
+    p3w = point.rolling(time=5).mean()
 
-    date = row['date']
-    v = point.sel(time=date)
-    v1w = p1w.sel(time=date)
-    v2w = p2w.sel(time=date)
-    v3w = p3w.sel(time=date)
+    date = datetime.strptime(row['date'], '%Y-%m-%d').date()
+
+    date1 = date + timedelta(days=1)
+    date2 = date + timedelta(days=2)
+    date3 = date + timedelta(days=3)
+
+    date4 = date - timedelta(days=1)
+    date5 = date - timedelta(days=2)
+    date6 = date - timedelta(days=3)
+
+    v = point.sel(time=datetime.strftime(date, '%Y-%m-%d'))
+    v1w = p1w.sel(time=datetime.strftime(date, '%Y-%m-%d'))
+    v2w = p2w.sel(time=datetime.strftime(date, '%Y-%m-%d'))
+    v3w = p3w.sel(time=datetime.strftime(date, '%Y-%m-%d'))
+
+    v1w1 = p1w.sel(time=datetime.strftime(date1, '%Y-%m-%d'))
+    v2w1 = p2w.sel(time=datetime.strftime(date1, '%Y-%m-%d'))
+    v3w1 = p3w.sel(time=datetime.strftime(date1, '%Y-%m-%d'))
+
+    v1w2 = p1w.sel(time=datetime.strftime(date2, '%Y-%m-%d'))
+    v2w2 = p2w.sel(time=datetime.strftime(date2, '%Y-%m-%d'))
+    v3w2 = p3w.sel(time=datetime.strftime(date2, '%Y-%m-%d'))
+
+    v1w3 = p1w.sel(time=datetime.strftime(date3, '%Y-%m-%d'))
+    v2w3 = p2w.sel(time=datetime.strftime(date3, '%Y-%m-%d'))
+    v3w3 = p3w.sel(time=datetime.strftime(date3, '%Y-%m-%d'))
+
+    # ------------------------------------------------------------ -
+
+    v1w4 = p1w.sel(time=datetime.strftime(date4, '%Y-%m-%d'))
+    v2w4 = p2w.sel(time=datetime.strftime(date4, '%Y-%m-%d'))
+    v3w4 = p3w.sel(time=datetime.strftime(date4, '%Y-%m-%d'))
+
+    v1w5 = p1w.sel(time=datetime.strftime(date5, '%Y-%m-%d'))
+    v2w5 = p2w.sel(time=datetime.strftime(date5, '%Y-%m-%d'))
+    v3w5 = p3w.sel(time=datetime.strftime(date5, '%Y-%m-%d'))
+
+    v1w6 = p1w.sel(time=datetime.strftime(date6, '%Y-%m-%d'))
+    v2w6 = p2w.sel(time=datetime.strftime(date6, '%Y-%m-%d'))
+    v3w6 = p3w.sel(time=datetime.strftime(date6, '%Y-%m-%d'))
 
     return {
         'fire_id': row['fire_id'],
@@ -47,9 +82,33 @@ def extract_features(row):
         't1w': v1w.air.values.item(0),
         't2w': v2w.air.values.item(0),
         't3w': v3w.air.values.item(0),
+        't1w1': v1w1.air.values.item(0),
+        't2w1': v2w1.air.values.item(0),
+        't3w1': v3w1.air.values.item(0),
+        't1w2': v1w2.air.values.item(0),
+        't2w2': v2w2.air.values.item(0),
+        't3w2': v3w2.air.values.item(0),
         'h1w': v1w.rhum.values.item(0),
         'h2w': v2w.rhum.values.item(0),
-        'h3w': v3w.rhum.values.item(0)
+        'h3w': v3w.rhum.values.item(0),
+        'h1w1': v1w.rhum.values.item(0),
+        'h2w1': v2w.rhum.values.item(0),
+        'h3w1': v3w.rhum.values.item(0),
+        'h1w2': v1w.rhum.values.item(0),
+        'h2w2': v2w.rhum.values.item(0),
+        'h3w2': v3w.rhum.values.item(0),
+        'h1w3': v1w.rhum.values.item(0),
+        'h2w3': v2w.rhum.values.item(0),
+        'h3w3': v3w.rhum.values.item(0),
+        'h1w4': v1w.rhum.values.item(0),
+        'h2w4': v2w.rhum.values.item(0),
+        'h3w4': v3w.rhum.values.item(0),
+        'h1w5': v1w.rhum.values.item(0),
+        'h2w5': v2w.rhum.values.item(0),
+        'h3w5': v3w.rhum.values.item(0),
+        'h1w6': v1w.rhum.values.item(0),
+        'h2w6': v2w.rhum.values.item(0),
+        'h3w6': v3w.rhum.values.item(0),
     }
 
 
